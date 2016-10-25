@@ -16,4 +16,4 @@ A tour company advertises various events. Each event has a name, starts at a fix
 
 ####Problem PART-2
 Translate the following UML class diagram into a relational schema expressed in SQL
-![Benefit-UML diagram](prasadnm92.github.com/databaseManagement/img/benefit.jpg)
+![Benefit-UML diagram](benefit.jpg)
