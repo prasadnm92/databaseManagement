@@ -1,6 +1,7 @@
 Assignment link: http://www.ccs.neu.edu/home/kenb/16/fal/5200/2.html
 
 ![Nobility-UML diagram](nobility.jpg)
+   
 Express the following as queries or commands using SQL. The queries and commands must function correctly for a database state of the SQL schema as specified by *createTables.sql* (i.e., any state of the database that satisfies all of the constraints specified in the SQL schema). The UML diagram above might help you to formulate your queries and commands, but your queries and commands must be for the SQL schema.
 
 1. List both the personal name and the noble name (i.e., the person's nobility name) of every "Count" (in any language) in the database.
