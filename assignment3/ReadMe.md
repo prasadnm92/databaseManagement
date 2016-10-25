@@ -2,7 +2,7 @@ Assignment link: http://www.ccs.neu.edu/home/kenb/16/fal/5200/3.html
 
 ![Benefit-UML diagram](benefit.jpg)
    
-Use the relational model to the above data model for solving the following:
+Use the relational model to the above data model for solving the following:  
 1. Develop an assertion, written in SQL, that enforces the requirement that allows a benefit plan must be entitled to the benefit that the benefit plan is a part of.
 2. Develop an assertion, written in SQL, that enforces the requirement that an employee who selects a benefit plan must have a position that is entitled to the benefit and allows this benefit plan.
 3. Develop an assertion, written in SQL, that enforces the requirement that every family benefit plan selected by an employee include the family relationships of all dependents of the employee.
