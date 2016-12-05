@@ -1,0 +1,271 @@
+1. For each schedule:
+
+	a. Determine whether the schedule is view-serializable, conflict-serializable, recoverable, cascadeless and/or strict. Note: you must state separately whether each one of these holds.
+
+	b. For each of the 5 answers in the first part above, explain why or why not. In the case of the two notions of serializability, you must either give an equivalent serial schedule or a reason why the schedule is not serializable. For the other three concepts, you must give an example of a violation if the schedule does not have the property.
+
+The following are the schedules:
+
+R4(B), R1(B), R3(C), W2(A), R4(A), R1(B), R3(A), C3, C4, C1, R2(A), C2
+R1(B), W3(A), W2(A), W3(B), C3, W1(C), C1, R2(A), R2(B), W4(C), R4(C), W4(C), C2, C4
+R3(B), W2(A), W4(A), R3(B), R4(C), W2(A), W1(B), C2, C4, C3, R1(A), R1(C), C1
+R3(C), R2(A), W1(A), R1(B), R2(B), C2, R4(B), R4(C), W3(B), C4, C3, R1(B), R1(C), R1(B), C1
+R3(A), R1(A), W2(C), R2(A), R1(B), W2(A), R1(A), R3(B), W1(A), C1, C2, R3(C), R3(A), W3(C), R3(A), C3
+R2(B), R3(B), R2(A), W3(A), C3, R1(C), R1(B), R2(B), C1, R2(C), C2
+R2(A), R3(A), W1(B), W3(A), R1(A), R2(B), C1, R3(C), C3, C2
+R1(B), W2(C), R1(C), C1, W3(A), R2(A), R2(C), R3(A), W3(A), R3(B), W3(A), W3(C), R2(B), C2, W3(C), R3(B), C3
+
+======================================================================================================
+2. This problem uses the following XML schema:
+
+<schema xmlns='http://www.w3.org/2001/XMLSchema'>
+
+ <element name='Employee'>
+  <complexType>
+   <sequence>
+    <element ref='Name'/>
+    <element ref='Position'/>
+    <element ref='Address'/>
+    <element ref='Email'/>
+    <element ref='Dependent' minOccurs='0' maxOccurs='unbounded'/>
+    <element ref='Benefit' minOccurs='0' maxOccurs='unbounded'/>
+   </sequence>
+  </complexType>
+ </element>
+
+ <element name='Name'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='Position'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='Address'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='Email'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='Dependent'>
+  <complexType mixed='true'>
+   <attribute name='relatedBy' type='string' use='required'/>
+  </complexType>
+ </element>
+
+ <element name='Benefit'>
+  <complexType>
+   <sequence>
+    <element ref='Plan'/>
+   </sequence>
+   <attribute name='type' type='string' use='required'/>
+  </complexType>
+ </element>
+
+ <element name='Plan'>
+  <complexType>
+   <sequence>
+    <element ref='PlanName'/>
+    <element ref='PlanDescription'/>
+    <element ref='Cost' minOccurs='0' maxOccurs='unbounded'/>
+   </sequence>
+  </complexType>
+ </element>
+
+ <element name='PlanName'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='PlanDescription'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='Cost'>
+  <complexType>
+   <sequence>
+    <element ref='EmployeeCost'/>
+    <element ref='EmployerSubsidy'/>
+   </sequence>
+   <attribute name='period' type='string' use='required'/>
+  </complexType>
+ </element>
+
+ <element name='EmployeeCost'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='EmployerSubsidy'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+</schema>
+Here is an example of an XML document for the XML schema
+
+<Employee>
+  <Name>Henri Poincare</Name>
+  <Position>Professor</Position>
+  <Address>100 St. Botolph Street, Boston, MA</Address>
+  <Email>h.poincare@neu.edu</Email>
+  <Dependent relatedBy="Spouse">Louise Poulin d'Andesi</Dependent>
+  <Dependent relatedBy="Child">Jeanne Poincare</Dependent>
+  <Dependent relatedBy="Child">Yvonne Poincare</Dependent>
+  <Dependent relatedBy="Child">Henriette Poincare</Dependent>
+  <Dependent relatedBy="Child">Leon Poincare</Dependent>
+  <Benefit type="Medical">
+    <Plan>
+       <PlanName>Fantastic Plan</PlanName>
+       <PlanDescription>Lots of medical benefits</PlanDescription>
+       <Cost period="month">
+         <EmployeeCost>100.25</EmployeeCost>
+         <EmployerSubsidy>50.10</EmployerSubsidy>
+       </Cost>
+       <Cost period="week">
+         <EmployeeCost>24.50</EmployeeCost>
+         <EmployerSubsidy>11.56</EmployerSubsidy>
+       </Cost>
+    </Plan>
+  </Benefit>
+  <Benefit type="Dental">
+    <Plan>
+       <PlanName>Sparkling Plan</PlanName>
+       <PlanDescription>Lots of dental benefits</PlanDescription>
+       <Cost period="month">
+         <EmployeeCost>5.50</EmployeeCost>
+         <EmployerSubsidy>2.10</EmployerSubsidy>
+       </Cost>
+       <Cost period="week">
+         <EmployeeCost>1.51</EmployeeCost>
+         <EmployerSubsidy>0.50</EmployerSubsidy>
+       </Cost>
+    </Plan>
+  </Benefit>
+</Employee>
+Here is the same data expressed as a JSON expression:
+
+{
+  "Employee" :
+    {
+      "Name" : "Henri Poincare",
+      "Position" : "Professor",
+      "Address" : "100 St. Botolph Street, Boston, MA",
+      "Email" : "h.poincare@neu.edu",
+      "Dependent" : [
+        {
+          "relatedBy" : "Spouse",
+          "name" : "Louise Poulin d'Andesi"
+        },
+        {
+          "relatedBy" : "Child",
+          "name" : "Jeanne Poincare"
+        },
+        {
+          "relatedBy" : "Child",
+          "name" : "Yvonne Poincare"
+        },
+        {
+          "relatedBy" : "Child",
+          "name" : "Henriette Poincare"
+        },
+        {
+          "relatedBy" : "Child",
+          "name" : "Leon Poincare"
+        }
+      ],
+      "Benefit" : [
+        {
+          "type" : "Medical",
+          "Plan" : {
+            "PlanName" : "Fantastic Plan",
+            "PlanDescription" : "Lots of medical benefits",
+            "Cost" : [
+              {
+                "period" : "month",
+                "EmployeeCost" : "100.25",
+                "EmployerSubsidy" : "50.10"
+              },
+              {
+                "period" : "week",
+                "EmployeeCost" : "24.50",
+                "EmployerSubsidy" : "11.56"
+              }
+            ]
+          }
+        },
+        {
+          "type" : "Dental",
+          "Plan" : {
+            "PlanName" : "Sparkling Plan",
+            "PlanDescription" : "Lots of dental benefits",
+            "Cost" : [
+              {
+                "period" : "month",
+                "EmployeeCost" : "5.50",
+                "EmployerSubsidy" : "2.10"
+              },
+              {
+                "period" : "year",
+                "EmployeeCost" : "1.51",
+                "EmployerSubsidy" : "0.50"
+              }
+            ]
+          }
+        }
+      ]
+    }
+}
+Specify hierarchical queries to solve the following problems for XML and JSON. In general, the queries for XML will differ from the queries for JSON, so you will need two queries for each problem, for a total of 12 queries in all. For each query, specify whether you are using XPath 1.0 or JSON semantics.
+
+a. Show the name of the employee's spouse, if the employee has a spouse; otherwise show "unmarried".
+XPath 1.0
+concat(substring(/Employee/Dependent[@relatedBy="Spouse"]/text(), 0), substring("unmarried", 10*boolean(/Employee/Dependent[@relatedBy="Spouse"])))
+
+HAPL JSON Semantics
+concat(substring(//Employee/Dependent/*[relatedBy="Spouse"]/name, 0), substring("unmarried", 9*boolean(//Employee/Dependent/*[relatedBy="Spouse"])))
+---------------------------------------------------------------------------------------------------
+b. List all the benefits with weekly employee cost greater than 20.
+XPath 1.0
+//Benefit[Plan/Cost[@period="week" and EmployeeCost>20]]
+
+HAPL JSON Semantics
+//Benefit/*[Plan/Cost/*/period="week" and Plan/Cost/*/EmployeeCost>20]
+---------------------------------------------------------------------------------------------------
+c. Find the address of the professor who has at least three dependants.
+XPath 1.0
+/Employee[Position="Professor" and count(Dependent)>=3]/Address
+
+HAPL JSON Semantics
+//Employee[Position="Professor" and count(Dependent/*)>=3]/Address
+---------------------------------------------------------------------------------------------------
+d. List the plan name of all benefits with employee cost less than twice the subsidy given by the employer on a weekly basis.
+XPath 1.0
+//Benefit/Plan[Cost[EmployeeCost<2*EmployeeSubsidy and @period="week"]]/PlanName
+
+HAPL JSON Semantics
+//Benefit/*/Plan[Cost/*[period="week" and EmployeeCost < 2*EmployerSubsidy]]/PlanName
+---------------------------------------------------------------------------------------------------
+e. Find the employee whose address ends in "Boston, MA" and whose spouse's name contains "Andesi" in it.
+XPath 1.0
+/Employee[ends-with(Address,"Boston, MA") and Dependent[@relatedBy="Spouse" and contains(.,"Andesi")]]
+
+HAPL JSON Semantics
+//Employee[substring(Address, string-length(Address)-10)="Boston, MA" and Dependent/*[relatedBy="Spouse" and contains(name,"Andesi")]]
+---------------------------------------------------------------------------------------------------
+f. List the name of the employee who named all his children with a first name that starts with the letter 'H'.
+XPath 1.0
+/Employee[count(Dependent[@relatedBy="Child" and starts-with(.,"H")])=count(Dependent[@relatedBy="Child"])]/Name
+
+HAPL JSON Semantics
+//Employee[count(Dependent/*[relatedBy="Child" and starts-with(name,"H")])=count(Dependent/*[relatedBy="Child"])]/Name
+---------------------------------------------------------------------------------------------------
+You may express your queries using either XPath 1.0 or HAPL. Of course, XPath can only be applied to XML data and only supports XPath 1.0 semantics. To test your HAPL queries, there is an Online HAPL Query Processor. See HAPL API Documentation for more information.
+
+Your queries must correctly retrieve the specified data for any consistent state of the XML document or JSON expression (i.e., XML document that satisfies all of the constraints specified in the XSD schema or JSON expression derived from such an XML document).
